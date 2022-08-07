@@ -15,6 +15,8 @@ def student_list_(request):
 
     return render(request, 'output.html',{'posts':posts})
 
+
+# Filter and OR query
 def student_list_(request):
 
     # posts = Student.objects.filter(surname__startswith='austin') | Student.objects.filter(surname__startswith='baldwin')
@@ -29,7 +31,7 @@ def student_list_(request):
 
 
 
-
+# and query
 def student_list_(request):
 
     # posts = Student.objects.filter(classroom=3) & Student.objects.filter(surname__startswith='baldwin')
@@ -40,8 +42,8 @@ def student_list_(request):
 
     return render(request, 'output.html',{'posts':posts})
 
-
-def student_list(request):
+# union query
+def student_list_(request):
     # posts=Student.objects.all().values_list('firstname').union(Teacher.objects.all().values_list('firstname'))
     posts=Student.objects.all().values('firstname').union(Teacher.objects.all().values('firstname'))
     print(posts)
@@ -50,9 +52,31 @@ def student_list(request):
 
     return render(request, 'output.html',{'posts':posts})
 
+# NOT Query
+# exclude 
+def student_list_(request):
+    # posts=Student.objects.exclude(age=20)
+    posts=Student.objects.exclude(age__gt=20)
 
+    # gt
+    # gte
+    # lt
+    # lte
+    
+    print(posts)
+    print(posts.query)
+    print(connection.queries)
 
+    return render(request, 'output.html',{'posts':posts})
+# Filter
+def student_list(request):
 
+    posts=Student.objects.filter(~Q(age=20) & ~Q(firstname='raquel'))
+    print(posts)
+    print(posts.query)
+    print(connection.queries)
+
+    return render(request, 'output.html',{'posts':posts})
 
 
 
