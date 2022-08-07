@@ -69,7 +69,7 @@ def student_list_(request):
 
     return render(request, 'output.html',{'posts':posts})
 # Filter
-def student_list(request):
+def student_list_(request):
 
     posts=Student.objects.filter(~Q(age=20) & ~Q(firstname='raquel'))
     print(posts)
@@ -77,6 +77,28 @@ def student_list(request):
     print(connection.queries)
 
     return render(request, 'output.html',{'posts':posts})
+
+
+# SELECT and OutPut Individual field
+def student_list_(request):
+    posts=Student.objects.filter(age=20).only('firstname','age')
+    print(posts)
+    print(posts.query)
+    print(connection.queries)
+
+    return render(request, 'output.html',{'data':posts})
+
+
+
+# Simple performing raw query
+def student_list(request):
+    sql="SELECT * FROM student_student"
+    posts=Student.objects.raw(sql)
+    print(posts)
+    print(posts.query)
+    print(connection.queries)
+
+    return render(request, 'output.html',{'data':posts})
 
 
 
