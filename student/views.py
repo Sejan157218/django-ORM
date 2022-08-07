@@ -91,7 +91,7 @@ def student_list_(request):
 
 
 # Simple performing raw query
-def student_list(request):
+def student_list_(request):
     sql="SELECT * FROM student_student"
     posts=Student.objects.raw(sql)
     print(posts)
@@ -99,6 +99,27 @@ def student_list(request):
     print(connection.queries)
 
     return render(request, 'output.html',{'data':posts})
+
+
+# Simple performing raw query
+def dictfetchall(cursor):
+    "Return all rows from a cursor as a dict"
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
+
+def student_list(request):
+    
+    cursor=connection.cursor()
+    cursor.execute('SELECT * FROM student_student')
+    r=dictfetchall(cursor)
+    # print(posts)
+    # print(posts.query)
+    # print(connection.queries)
+
+    return render(request, 'output.html',{'data':r})
 
 
 
